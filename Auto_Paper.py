@@ -91,7 +91,7 @@ def main():
 
     # get the builds list and download latest
     response = requests.get(f'https://papermc.io/api/v2/projects/paper/versions/{chosen_version}/')
-    latest_build = response.json()['builds'][0]
+    latest_build = response.json()['builds'][-1]
 
     if latest_build != installed_ver:
         print ('downloading new version...')
