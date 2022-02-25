@@ -6,6 +6,7 @@ from time import sleep
 import tkinter
 from tkinter.filedialog import askdirectory
 from tkinter import simpledialog
+import pyperclip
 
 import requests
 from portforwardlib import forwardPort
@@ -46,11 +47,11 @@ def main():
 
 
     # portforwarding
-    UPNPU = forwardPort(25565, 25565, None, None, False, 'UDP', 0, 'Minecraft UPnP', False)
-    UPNPT = forwardPort(25565, 25565, None, None, False, 'TCP', 0, 'Minecraft UPnP', False)
-    if UPNPT == False:
+    UPnPu = forwardPort(25565, 25565, None, None, False, 'UDP', 0, 'Minecraft UPnP', False)
+    UPnPt = forwardPort(25565, 25565, None, None, False, 'TCP', 0, 'Minecraft UPnP', False)
+    if UPnPt == False:
         print('TCP port forwarding failed')
-    if UPNPU == False:
+    if UPnPu == False:
         print('UDP port forwarding failed')
 
 
@@ -130,11 +131,15 @@ def main():
         os.startfile('server.jar')
 
 
-    # prompts to close and !portforwards
+    # gives the user the address, prompts to close and !portforwards
+    ip = requests.get('https://api.ipify.org').content.decode('utf8')
+    print(f"{ip}:25565 copied to clipboard!")
+    pyperclip.copy(f"{ip}:25565")
+
     input('Press Enter to close the server...')
     os.system('taskkill /im  javaw.exe')
-    UPNPU = forwardPort(25565, 25565, None, None, True, 'UDP', 0, 'Minecraft UPnP', False)
-    UPNPT = forwardPort(25565, 25565, None, None, True, 'TCP', 0, 'Minecraft UPnP', False)
+    UPnPu = forwardPort(25565, 25565, None, None, True, 'UDP', 0, 'Minecraft UPnP', False)
+    UPnPt = forwardPort(25565, 25565, None, None, True, 'TCP', 0, 'Minecraft UPnP', False)
 
 if __name__ == "__main__":
     main()
