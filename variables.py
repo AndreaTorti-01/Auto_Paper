@@ -20,6 +20,6 @@ for r in range (4):
 
 chosenVersion = tkinter.StringVar(window)
 
-folder = tkinter.StringVar()
+folder = tkinter.StringVar(window)
 
 window.update()

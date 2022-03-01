@@ -5,6 +5,7 @@ import shutil
 PyInstaller.__main__.run([
     'Auto_Paper.py',
     '--onefile'
+    '--noconsole'
 ])
 
 shutil.move("dist\Auto_Paper.exe", "Auto_Paper.exe")
