@@ -1,4 +1,7 @@
+from importlib.resources import path
 import tkinter
+import backend
+from pathlib import Path
 
 palette = {
   "bg": "#4a4d4d",
@@ -13,15 +16,10 @@ window.configure(bg= palette["bg"])
 window.title('Auto_Paper')
 window.iconbitmap('icon.ico')
 
-options = [
-"Jan",
-"Feb",
-"Mar"
-] #etc
+options = backend.get_versions()
 
 chosenVersion = tkinter.StringVar(window)
 chosenVersion.set(options[0]) # default value
-# chosenVersion.get() to get the value
 
 for c in range (5):
     window.columnconfigure(c, weight=1)
@@ -51,9 +49,9 @@ folderSelectionButton = tkinter.Button(
     fg = palette["fg"],
     activebackground = palette["activebackground"],
     activeforeground = palette["activeforeground"],
-
     width = 20,
-    height = 1
+    height = 1,
+    command = backend.folder_selection
 )
 
 openPorts = tkinter.Button(
@@ -64,7 +62,8 @@ openPorts = tkinter.Button(
     activebackground = palette["activebackground"],
     activeforeground = palette["activeforeground"],
     width = 20,
-    height = 1
+    height = 1,
+    command = backend.open_ports
 )
 
 closePorts = tkinter.Button(
@@ -75,7 +74,8 @@ closePorts = tkinter.Button(
     activebackground = palette["activebackground"],
     activeforeground = palette["activeforeground"],
     width = 20,
-    height = 1
+    height = 1,
+    command = backend.close_ports
 )
 
 startServer = tkinter.Button(
@@ -86,7 +86,8 @@ startServer = tkinter.Button(
     activebackground = palette["activebackground"],
     activeforeground = palette["activeforeground"],
     width = 20,
-    height = 1
+    height = 1,
+    command = backend.start_server
 )
 
 stopServer = tkinter.Button(
@@ -97,7 +98,8 @@ stopServer = tkinter.Button(
     activebackground = palette["activebackground"],
     activeforeground = palette["activeforeground"],
     width = 20,
-    height = 1
+    height = 1,
+    command = backend.stop_server
 )
 
 selectVersion = tkinter.OptionMenu(window, chosenVersion, *options)
