@@ -6,8 +6,7 @@ from tkinter.filedialog import askdirectory
 import pyperclip
 import requests
 from portforwardlib import forwardPort
-
-folder = Path("C:\\")
+import variables
 
 # get the version list
 def get_versions():
@@ -37,13 +36,12 @@ def close_ports():
 
 # choose installation folder
 def folder_selection():
-    folder = Path(askdirectory())
-    return folder
+    variables.folder.set(Path(askdirectory()))
 
 # read/create version file
-def start_server(chosen_version):
-    installed_file = folder / 'installed.txt'
-    server_file = folder / 'server.jar'
+def start_server():
+    installed_file = str(variables.folder) / 'installed.txt' ??
+    server_file = str(variables.folder) / 'server.jar' ??
     try:
         with open(installed_file, mode='r', encoding='utf-8') as f:
             installed_ver = int(f.read())
@@ -51,12 +49,12 @@ def start_server(chosen_version):
         with open(installed_file, mode='w', encoding='utf-8') as f:
             f.write('0')
             installed_ver = 0
-    response = requests.get(f'https://papermc.io/api/v2/projects/paper/versions/{chosen_version}/')
+    response = requests.get(f'https://papermc.io/api/v2/projects/paper/versions/{variables.chosenVersion}/')
     latest_build = response.json()['builds'][-1]
 
     if latest_build != installed_ver:
         print ('downloading new version...')
-        data = requests.get(f'https://papermc.io/api/v2/projects/paper/versions/{chosen_version}/builds/{latest_build}/downloads/paper-{chosen_version}-{latest_build}.jar')
+        data = requests.get(f'https://papermc.io/api/v2/projects/paper/versions/{variables.chosenVersion}/builds/{latest_build}/downloads/paper-{variables.chosenVersion}-{latest_build}.jar')
 
         with open(server_file, 'wb') as f:
             f.write(data.content)
@@ -68,21 +66,21 @@ def start_server(chosen_version):
         print('latest version already installed')
 
     # starts the server
-    os.chdir(folder)
+    os.chdir(variables.folder)
     os.startfile('server.jar')
 
     # waits for start if never started
     mod_eula = False
-    while(not os.path.exists(folder / 'eula.txt')):
+    while(not os.path.exists(variables.folder / 'eula.txt')):
         sleep(2)
         mod_eula = True
 
     # edits eula if eula is false
     if mod_eula == True:
-        a_file = open(folder / 'eula.txt', 'r')
+        a_file = open(variables.folder / 'eula.txt', 'r')
         list_of_lines = a_file.readlines()
         list_of_lines[3] = 'eula=true\n'
-        a_file = open(folder / 'eula.txt', 'w')
+        a_file = open(variables.folder / 'eula.txt', 'w')
         a_file.writelines(list_of_lines)
         a_file.close()
         os.startfile('server.jar')
