@@ -1,7 +1,7 @@
 from importlib.resources import path
 import tkinter
 import backend
-from pathlib import Path
+from functools import partial
 
 palette = {
   "bg": "#4a4d4d",
@@ -17,7 +17,6 @@ window.title('Auto_Paper')
 window.iconbitmap('icon.ico')
 
 options = backend.get_versions()
-
 chosenVersion = tkinter.StringVar(window)
 chosenVersion.set(options[0]) # default value
 
@@ -87,7 +86,7 @@ startServer = tkinter.Button(
     activeforeground = palette["activeforeground"],
     width = 20,
     height = 1,
-    command = backend.start_server
+    command = partial(backend.start_server, chosenVersion)
 )
 
 stopServer = tkinter.Button(

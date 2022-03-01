@@ -4,9 +4,10 @@ from pathlib import Path
 from time import sleep
 from tkinter.filedialog import askdirectory
 import pyperclip
-
 import requests
 from portforwardlib import forwardPort
+
+folder = Path("C:\\")
 
 # get the version list
 def get_versions():
@@ -36,10 +37,11 @@ def close_ports():
 
 # choose installation folder
 def folder_selection():
-    return Path(askdirectory())
+    folder = Path(askdirectory())
+    return folder
 
 # read/create version file
-def start_server(folder, chosen_version):
+def start_server(chosen_version):
     installed_file = folder / 'installed.txt'
     server_file = folder / 'server.jar'
     try:
