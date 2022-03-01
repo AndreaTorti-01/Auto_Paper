@@ -4,7 +4,7 @@ import shutil
 
 PyInstaller.__main__.run([
     'Auto_Paper.py',
-    '--onefile'
+    '--onefile',
     '--noconsole'
 ])
 
