@@ -1,4 +1,3 @@
-from importlib.resources import path
 import tkinter
 import backend
 import variables
