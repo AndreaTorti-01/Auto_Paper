@@ -116,6 +116,18 @@ console = scrolledtext.ScrolledText(
 pl = PrintLogger(console)
 sys.stdout = pl
 
+installJava = tkinter.Button(
+    text = "Install Java",
+    font = "Arial 20",
+    bg = variables.palette["bg"],
+    fg = variables.palette["fg"],
+    activebackground = variables.palette["activebackground"],
+    activeforeground = variables.palette["activeforeground"],
+    width = 20,
+    height = 1,
+    command = backend.install_java
+)
+
 folderLabel.grid(row = 0, column = 0, columnspan = 1)
 folderEntry.grid(row = 0, column = 1, columnspan = 3)
 folderSelectionButton.grid(row = 0, column = 4, columnspan = 1)
@@ -125,6 +137,7 @@ selectVersion.grid(row = 1, column = 2, columnspan = 1)
 startServer.grid(row = 1, column = 3, columnspan = 2)
 
 closePorts.grid(row = 2, column = 0, columnspan = 2)
+installJava.grid(row = 2, column = 2, columnspan = 1)
 stopServer.grid(row = 2, column = 3, columnspan = 2)
 
 console.grid(row = 3, column = 0, columnspan = 5)
