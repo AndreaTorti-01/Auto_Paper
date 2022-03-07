@@ -54,7 +54,7 @@ def start_server_t():
     if(not os.path.exists(folder)):
         os.mkdir(folder)
     installed_file = folder/ 'installed.txt'
-    server_file = folder / 'server.jar'
+    server_file = folder / 'server.jdk'
     try:
         with open(installed_file, mode='r', encoding='utf-8') as f:
             installed_build = int(f.read())
@@ -67,7 +67,7 @@ def start_server_t():
 
     if latest_build != installed_build:
         print ('downloading new version...')
-        data = requests.get(f'https://papermc.io/api/v2/projects/paper/versions/{chosen_version}/builds/{latest_build}/downloads/paper-{chosen_version}-{latest_build}.jar')
+        data = requests.get(f'https://papermc.io/api/v2/projects/paper/versions/{chosen_version}/builds/{latest_build}/downloads/paper-{chosen_version}-{latest_build}.jdk')
 
         with open(server_file, 'wb') as f:
             f.write(data.content)
@@ -80,7 +80,7 @@ def start_server_t():
 
     # starts the server
     os.chdir(folder)
-    os.startfile('server.jar')
+    os.startfile('server.jdk')
     print('starting up...')
 
     # waits for start if never started
@@ -97,7 +97,7 @@ def start_server_t():
         a_file = open(folder / 'eula.txt', 'w')
         a_file.writelines(list_of_lines)
         a_file.close()
-        os.startfile('server.jar')
+        os.startfile('server.')
 
     # gives the user the address, prompts to close and !portforwards
     ip = requests.get('https://api.ipify.org').content.decode('utf8')
