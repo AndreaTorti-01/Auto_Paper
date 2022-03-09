@@ -109,3 +109,8 @@ def stop_server():
 def stop_server_t():
     os.system('taskkill /im  javaw.exe')
     print('stopping server...')
+
+def install_java():
+    Thread(target=install_java_t).start()
+def install_java_t():
+    pass
