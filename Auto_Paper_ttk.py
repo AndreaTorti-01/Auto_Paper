@@ -14,7 +14,6 @@ window = tkinter.Tk()
 window.geometry("960x540")
 window.configure(bg= palette["bg"])
 window.title('Auto_Paper')
-window.iconbitmap('icon.ico')
 
 options = [
 "Jan",
