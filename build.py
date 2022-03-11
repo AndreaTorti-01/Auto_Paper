@@ -2,13 +2,20 @@ import PyInstaller.__main__
 import os
 import shutil
 from pathlib import Path
+import platform
+
 PyInstaller.__main__.run([
     'Auto_Paper.py',
     '--onefile',
     '--noconsole'
 ])
 
-shutil.move(Path("dist/Auto_Paper.exe"), "Auto_Paper.exe")
+if platform.system() == 'Linux':
+    shutil.move(Path("dist/Auto_Paper"), "Auto_Paper")
+elif platform.system() == 'Windows':
+    shutil.move(Path("dist/Auto_Paper.exe"), "Auto_Paper.exe")
+elif platform.system() == 'Darwin':
+    shutil.move(Path("dist/Auto_Paper"), "Auto_Paper")
 
 os.remove("Auto_Paper.spec")
 
