@@ -20,9 +20,9 @@ def open_file(filename):
         subprocess.call([opener, filename])
 
 # downloads and runs zulu java installer
-def download_java():
-    Thread(target=download_java_t).start()
-def download_java_t():
+def install_java():
+    Thread(target=install_java_t).start()
+def install_java_t():
     download_string = 'https://api.azul.com/zulu/download/community/v1.0/bundles/latest/binary?bundle_type=jre&arch=x86'
 
     if platform.machine().endswith('64'):
@@ -36,7 +36,7 @@ def download_java_t():
         get_versions_string = get_versions_string + '&os=windows&ext=msi'
     elif platform.system() == 'Darwin':
         get_versions_string = get_versions_string + '&os=macos&ext=dmg'
-        
+
     chosen_java_version = variables.chosenJavaVersion.get()
     get_versions_string = get_versions_string + f'&java_version={chosen_java_version}'
 
@@ -171,8 +171,3 @@ def stop_server():
 def stop_server_t():
     os.system('taskkill /im  javaw.exe')
     print('stopping server...')
-
-def install_java():
-    Thread(target=install_java_t).start()
-def install_java_t():
-    pass
