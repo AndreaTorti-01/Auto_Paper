@@ -1,5 +1,7 @@
+import platform
 import os
-from sys import exit
+import sys
+import subprocess
 from pathlib import Path
 from time import sleep
 from tkinter.filedialog import askdirectory
@@ -9,14 +11,74 @@ from portforwardlib import forwardPort
 import variables
 from threading import Thread
 
+
+def open_file(filename):
+    if sys.platform == "win32":
+        os.startfile(filename)
+    else:
+        opener = "open" if sys.platform == "darwin" else "xdg-open"
+        subprocess.call([opener, filename])
+
+# downloads and runs zulu java installer
+def download_java():
+    Thread(target=download_java_t).start()
+def download_java_t():
+    download_string = 'https://api.azul.com/zulu/download/community/v1.0/bundles/latest/binary?bundle_type=jre&arch=x86'
+
+    if platform.machine().endswith('64'):
+        get_versions_string = get_versions_string + '&hw_bitness=64'
+    else:
+        get_versions_string = get_versions_string + '&hw_bitness=32'
+
+    if platform.system() == 'Linux':
+        get_versions_string = get_versions_string + '&os=linux&ext=deb'
+    elif platform.system() == 'Windows':
+        get_versions_string = get_versions_string + '&os=windows&ext=msi'
+    elif platform.system() == 'Darwin':
+        get_versions_string = get_versions_string + '&os=macos&ext=dmg'
+        
+    chosen_java_version = variables.chosenJavaVersion.get()
+    get_versions_string = get_versions_string + f'&java_version={chosen_java_version}'
+
+    response = requests.get(download_string)
+
+    with open("javainstaller.msi", 'wb') as f:
+        f.write(response.content)
+    open_file("javainstaller.msi")
+
 # get the version list
-def get_versions():
+def get_minecraft_versions():
     try:
         response = requests.get('https://papermc.io/api/v2/projects/paper/')
     except:
         print('api error')
-        exit()
+        sys.exit()
     return response.json()['versions'][::-1]
+
+# gets list of available java versions
+def get_java_versions():
+    get_versions_string = 'https://api.azul.com/zulu/download/community/v1.0/bundles?bundle_type=jre&arch=x86'
+
+    if platform.machine().endswith('64'):
+        get_versions_string = get_versions_string + '&hw_bitness=64'
+    else:
+        get_versions_string = get_versions_string + '&hw_bitness=32'
+
+    if platform.system() == 'Linux':
+        get_versions_string = get_versions_string + '&os=linux&ext=deb'
+    elif platform.system() == 'Windows':
+        get_versions_string = get_versions_string + '&os=windows&ext=msi'
+    elif platform.system() == 'Darwin':
+        get_versions_string = get_versions_string + '&os=macos&ext=dmg'
+
+    response = requests.get(get_versions_string)
+    list_of_dicts = response.json()
+    java_versions = []
+    for dict in list_of_dicts:
+        if not dict['java_version'][0] in java_versions:
+            java_versions.append(dict['java_version'][0])
+
+    return java_versions
 
 # portforwarding
 def open_ports():
@@ -49,7 +111,7 @@ def folder_selection():
 def start_server():
     Thread(target=start_server_t).start()
 def start_server_t():
-    chosen_version = variables.chosenVersion.get()
+    chosen_version = variables.chosenMinecraftVersion.get()
     folder = Path(variables.folder.get()) / f'{chosen_version}'
     if(not os.path.exists(folder)):
         os.mkdir(folder)
@@ -80,7 +142,7 @@ def start_server_t():
 
     # starts the server
     os.chdir(folder)
-    os.startfile('server.jar')
+    open_file('server.jar')
     print('starting up...')
 
     # waits for start if never started
@@ -97,7 +159,7 @@ def start_server_t():
         a_file = open(folder / 'eula.txt', 'w')
         a_file.writelines(list_of_lines)
         a_file.close()
-        os.startfile('server.jar')
+        open_file('server.jar')
 
     # gives the user the address, prompts to close and !portforwards
     ip = requests.get('https://api.ipify.org').content.decode('utf8')

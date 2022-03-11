@@ -14,10 +14,11 @@ window.title('Auto_Paper')
 
 for c in range (5):
     window.columnconfigure(c, weight=1)
-for r in range (4):
+for r in range (5):
     window.rowconfigure(r, weight=1)
 
-chosenVersion = tkinter.StringVar(window)
+chosenMinecraftVersion = tkinter.StringVar(window)
+chosenJavaVersion = tkinter.StringVar(window)
 
 folder = tkinter.StringVar(window)
 

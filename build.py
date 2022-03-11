@@ -1,14 +1,14 @@
 import PyInstaller.__main__
 import os
 import shutil
-
+from pathlib import Path
 PyInstaller.__main__.run([
     'Auto_Paper.py',
     '--onefile',
     '--noconsole'
 ])
 
-shutil.move("dist\Auto_Paper.exe", "Auto_Paper.exe")
+shutil.move(Path("dist/Auto_Paper.exe"), "Auto_Paper.exe")
 
 os.remove("Auto_Paper.spec")
 
