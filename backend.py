@@ -26,20 +26,21 @@ def install_java_t():
     download_string = 'https://api.azul.com/zulu/download/community/v1.0/bundles/latest/binary?bundle_type=jre&arch=x86'
 
     if platform.machine().endswith('64'):
-        get_versions_string = get_versions_string + '&hw_bitness=64'
+        download_string = download_string + '&hw_bitness=64'
     else:
-        get_versions_string = get_versions_string + '&hw_bitness=32'
+        download_string = download_string + '&hw_bitness=32'
 
     if platform.system() == 'Linux':
-        get_versions_string = get_versions_string + '&os=linux&ext=deb'
+        download_string = download_string + '&os=linux&ext=deb'
     elif platform.system() == 'Windows':
-        get_versions_string = get_versions_string + '&os=windows&ext=msi'
+        download_string = download_string + '&os=windows&ext=msi'
     elif platform.system() == 'Darwin':
-        get_versions_string = get_versions_string + '&os=macos&ext=dmg'
+        download_string = download_string + '&os=macos&ext=dmg'
 
     chosen_java_version = variables.chosenJavaVersion.get()
-    get_versions_string = get_versions_string + f'&java_version={chosen_java_version}'
+    download_string = download_string + f'&java_version={chosen_java_version}'
 
+    print("downloading java, please wait for the installer to start...")
     response = requests.get(download_string)
 
     with open("javainstaller.msi", 'wb') as f:
