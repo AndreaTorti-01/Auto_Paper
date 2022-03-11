@@ -10,7 +10,7 @@ import requests
 from portforwardlib import forwardPort
 import variables
 from threading import Thread
-
+import tempfile
 
 def open_file(filename):
     if sys.platform == "win32":
@@ -42,10 +42,11 @@ def install_java_t():
 
     print("downloading java, please wait for the installer to start...")
     response = requests.get(download_string)
-
-    with open("javainstaller.msi", 'wb') as f:
+    
+    tempDir = Path(tempfile.gettempdir())
+    with open(tempDir / "javainstaller.msi", 'wb') as f:
         f.write(response.content)
-    open_file("javainstaller.msi")
+    open_file(tempDir / "javainstaller.msi")
 
 # get the version list
 def get_minecraft_versions():
