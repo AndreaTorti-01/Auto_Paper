@@ -12,12 +12,12 @@ import variables
 from threading import Thread
 import tempfile
 
-def open_file(filename):
-    if sys.platform == "win32":
-        os.startfile(filename)
-    else:
-        opener = "open" if sys.platform == "darwin" else "xdg-open"
-        subprocess.call([opener, filename])
+# auxilliary
+def run_file(file):
+    try:
+        subprocess.Popen(file, shell=False)
+    except:
+        subprocess.Popen(str(file), shell=True)
 
 # downloads and runs zulu java installer
 def install_java():
@@ -31,11 +31,15 @@ def install_java_t():
         download_string = download_string + '&hw_bitness=32'
 
     if platform.system() == 'Linux':
-        download_string = download_string + '&os=linux&ext=deb'
+        system = "linux"
+        extension = "deb"
     elif platform.system() == 'Windows':
-        download_string = download_string + '&os=windows&ext=msi'
+        system = "windows"
+        extension = "msi"
     elif platform.system() == 'Darwin':
-        download_string = download_string + '&os=macos&ext=dmg'
+        system = "macos"
+        extension = "dmg"
+    download_string = download_string + f'&os={system}&ext={extension}'
 
     chosen_java_version = variables.chosenJavaVersion.get()
     download_string = download_string + f'&java_version={chosen_java_version}'
@@ -44,9 +48,9 @@ def install_java_t():
     response = requests.get(download_string)
     
     tempDir = Path(tempfile.gettempdir())
-    with open(tempDir / "javainstaller.msi", 'wb') as f:
+    with open(tempDir / f"javainstaller.{extension}", 'wb') as f:
         f.write(response.content)
-    open_file(tempDir / "javainstaller.msi")
+    run_file(tempDir / f"javainstaller.{extension}")
 
 # get the version list
 def get_minecraft_versions():
@@ -144,7 +148,7 @@ def start_server_t():
 
     # starts the server
     os.chdir(folder)
-    open_file('server.jar')
+    run_file('server.jar')
     print('starting up...')
 
     # waits for start if never started
@@ -161,7 +165,7 @@ def start_server_t():
         a_file = open(folder / 'eula.txt', 'w')
         a_file.writelines(list_of_lines)
         a_file.close()
-        open_file('server.jar')
+        run_file('server.jar')
 
     # gives the user the address, prompts to close and !portforwards
     ip = requests.get('https://api.ipify.org').content.decode('utf8')
