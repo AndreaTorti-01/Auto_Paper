@@ -148,7 +148,7 @@ def start_server_t():
 
     # starts the server
     os.chdir(folder)
-    run_file('server.jar')
+    run_file(folder / 'server.jar')
     print('starting up...')
 
     # waits for start if never started
@@ -165,7 +165,7 @@ def start_server_t():
         a_file = open(folder / 'eula.txt', 'w')
         a_file.writelines(list_of_lines)
         a_file.close()
-        run_file('server.jar')
+        run_file(folder / 'server.jar')
 
     # gives the user the address, prompts to close and !portforwards
     ip = requests.get('https://api.ipify.org').content.decode('utf8')
